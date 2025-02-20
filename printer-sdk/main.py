@@ -37,13 +37,14 @@ def main():
     if result != 0:
         print("이미지 그리기 실패")
 
-    x = 56
-    y = 292
-    cx = 545
-    cy = 545
-    result = draw_image(device_handle, PAGE_FRONT, PANELID_COLOR, x, y, cx, cy, "prac.png")
-    if result != 0:
-        print("이미지 그리기 실패")
+    # AHC 예시 좌표
+    # x = 56
+    # y = 292
+    # cx = 545
+    # cy = 545
+    # result = draw_image(device_handle, PAGE_FRONT, PANELID_COLOR, x, y, cx, cy, "prac.png")
+    # if result != 0:
+    #     print("이미지 그리기 실패")
 
     # 미리보기 비트맵 가져오기
     result, bm_info = get_preview_bitmap(device_handle, PAGE_FRONT)
