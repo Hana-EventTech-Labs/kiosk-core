@@ -1,5 +1,5 @@
 from cffi_defs import ffi
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 
 def bitmapinfo_to_image(bitmap_info):
     

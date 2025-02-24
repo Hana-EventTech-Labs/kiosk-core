@@ -1,5 +1,5 @@
-from device_functions import get_device_list, get_device_id, open_device, draw_image, get_preview_bitmap, print_image, close_device, get_printer_status
-from image_utils import bitmapinfo_to_image
+from device_functions import *
+from image_utils import *
 from cffi_defs import ffi, SMART_OPENDEVICE_BYID, PAGE_FRONT, PANELID_COLOR
 import tkinter as tk
 from tkinter import messagebox
@@ -36,33 +36,64 @@ def main():
         print("장치 열기 실패")
         return
 
-    # ✅ 플리퍼 장착 여부 확인 추가
-    flipper_installed = get_printer_status(device_handle)
-    if flipper_installed is None:
-        print("프린터 상태를 가져오는 데 실패했습니다.")
-    elif flipper_installed:
-        print("✅ 이 프린터에는 플리퍼가 장착되어 있습니다. (양면 인쇄 가능)")
-    else:
-        print("❌ 이 프린터에는 플리퍼가 없습니다. (단면 인쇄만 가능)")
+    # set_surface_properties(device_handle)
 
-    # 이미지 그리기
-    x = 0
-    y = 0
-    cx = 0
-    cy = 0
-    result = draw_image(device_handle, PAGE_FRONT, PANELID_COLOR, x, y, cx, cy, "base.jpg")
+    # # ✅ 플리퍼 장착 여부 확인 추가
+    # flipper_installed = get_printer_status(device_handle)
+    # if flipper_installed is None:
+    #     print("프린터 상태를 가져오는 데 실패했습니다.")
+    # elif flipper_installed:
+    #     print("✅ 이 프린터에는 플리퍼가 장착되어 있습니다. (양면 인쇄 가능)")
+    # else:
+    #     print("❌ 이 프린터에는 플리퍼가 없습니다. (단면 인쇄만 가능)")
+
+
+    # Base이미지
+    result = draw_image(device_handle, PAGE_FRONT, PANELID_COLOR, 0, 0, 638, 1011, "1.jpg")
     if result != 0:
         print("이미지 그리기 실패")
 
-    # AHC 예시 좌표
-    x = 56
-    y = 292
-    cx = 545
-    cy = 545
-    result = draw_image(device_handle, PAGE_FRONT, PANELID_COLOR, x, y, cx, cy, "prac.png")
-    if result != 0:
-        print("이미지 그리기 실패")
+    #출력 내용물 좌표
+    # result = draw_image(device_handle, PAGE_FRONT, PANELID_COLOR, 56, 292, 545, 545, "prac.jpg")
+    # if result != 0:
+    #     print("이미지 그리기 실패")
 
+    font_style = 0x01  # Bold(0x01) + Italic(0x02)
+    font_path = "resources/LAB디지털.ttf"
+    font_name = load_font(font_path)  # 폰트 로드 후 폰트명 가져오기
+    font_color = 0x0000FF  # ✅ 빨간색 (COLORREF 형식: 0x00BBGGRR)
+    align = 0x01 | 0x10  # ✅ 가로 중앙 정렬 (OBJ_ALIGN_CENTER) + 세로 중앙 정렬 (OBJ_ALIGN_MIDDLE)
+
+    # # ✅ 특정 좌표에 텍스트 출력 ( 사용자 지정 폰트 색상 불가, 검은색 텍스트만 뽑을 때 사용 )
+    # if font_name:
+    #     print(f"사용할 폰트: {font_name}")
+
+    #     # ✅ 특정 좌표에 사용자 지정 폰트 적용하여 텍스트 출력
+    #     font_style = 0x01  # Bold(0x01) + Italic(0x02)
+    #     text="텍스트"
+    #     result = draw_text(device_handle, PAGE_FRONT, PANELID_COLOR, 245, 145, font_name, 36, font_style, text)
+
+    #     if result != 0:
+    #         print("❌ 텍스트 출력 실패")
+
+    multi_line_text = "첫 번째 줄\n두 번째 줄\n세 번째 줄"
+
+    # ✅ SmartComm_DrawText2를 사용하여 빨간색 볼드 텍스트 출력
+    result = draw_text2(
+        device_handle,
+        PAGE_FRONT, PANELID_COLOR,
+        x=0, y=50, width=400, height=100,  # 텍스트 출력 영역
+        # x=0, y=100, width=0, height=100,  # 텍스트 출력 영역
+        font_name=font_name, font_height=32, font_width=21,  # 폰트 및 크기 설정
+        font_style=font_style, font_color=font_color,  # 스타일 및 색상
+        text=multi_line_text,  # 출력할 텍스트
+        rotate=0, align=align, option=0
+    )
+
+    if result != 0:
+        print("❌ 텍스트 출력 실패")
+        
+        
     # 미리보기 비트맵 가져오기
     result, bm_info = get_preview_bitmap(device_handle, PAGE_FRONT)
     if result == 0:
