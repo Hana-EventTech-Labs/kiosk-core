@@ -17,7 +17,6 @@ ffi.cdef("""
 #define PANELID_OVERLAY 4
 #define PANELID_UV 8
 
-         
 typedef void* HSMART;
          
 typedef void* RECT;
@@ -74,6 +73,8 @@ int SmartComm_DrawImage(HSMART hHandle, unsigned char page, unsigned char panel,
 int SmartComm_GetPreviewBitmap(HSMART hHandle, unsigned char page, BITMAPINFO** const ppbi);
 int SmartComm_Print(HSMART hHandle);
 int SmartComm_CloseDevice(HSMART hHandle);
+int SmartComm_GetStatus(HSMART hHandle, DWORD* pStatus);
+
 """)
 
 dll_path = Path(__file__).parent / "resources" / "SmartComm2.dll"
