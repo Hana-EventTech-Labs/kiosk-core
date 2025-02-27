@@ -1,6 +1,6 @@
-from PyQt6.QtWidgets import QWidget, QGridLayout, QPushButton, QVBoxLayout, QSizePolicy, QLineEdit
-from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QFont
+from PySide6.QtWidgets import QWidget, QGridLayout, QPushButton, QVBoxLayout, QSizePolicy, QLineEdit
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QFont
 from .hangul_composer import HangulComposer
 
 
@@ -31,35 +31,26 @@ class VirtualKeyboard(QWidget):
     MAX_UPPERCASE = 100
     MAX_HANGUL = 100
 
-    def __init__(self, input_widget, second_screen=None):
+    def __init__(self, input_widget):
         super().__init__()
         self.input_widget = input_widget
-        self.second_screen = second_screen  # SecondScreen 인스턴스 저장
 
         self.is_hangul = True
         self.is_uppercase = False
         self.hangul_composer = HangulComposer()
-                # 제목 표시줄 제거 및 항상 상위에 유지
-        self.setWindowFlags(
-            Qt.WindowType.Tool | Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint
-        )
-        self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         self.initUI()
         self.update_keyboard_labels()
 
         self.bumper = False
 
     def initUI(self):
-        self.layout = QVBoxLayout()
-        self.layout.setSpacing(5)
-        self.setStyleSheet("""
-        VirtualKeyboard {
-            background-color: #1B2838;
-            border: 2px solid #00FFC2;
-            border-radius: 15px;
-            padding: 10px;
-        }
-        """)
+        outer_layout = QVBoxLayout(self)
+        outer_layout.setContentsMargins(0, 0, 0, 0)
+
+        container = QWidget()
+        container.setStyleSheet("background-color: #FFFFFF;")
+
+        container_layout = QVBoxLayout(container)        
             
         self.keys = [
             ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
@@ -81,7 +72,7 @@ class VirtualKeyboard(QWidget):
                 button.setStyleSheet(self.get_button_style())
                 row_layout.addWidget(button, 0, i)
                 row_buttons.append(button)
-            self.layout.addLayout(row_layout)
+            container_layout.addLayout(row_layout)
             self.button_widgets.append(row_buttons)
 
         special_layout = QGridLayout()
@@ -135,8 +126,9 @@ class VirtualKeyboard(QWidget):
         special_layout.setColumnStretch(3, 2)  # Backspace 버튼
         # special_layout.setColumnStretch(4, 2)  # 인쇄 버튼
 
-        self.layout.addLayout(special_layout)
-        self.setLayout(self.layout)
+        container_layout.addLayout(special_layout)
+        outer_layout.addWidget(container)
+        self.setLayout(outer_layout)
 
     def button_clicked(self, key):
         # print(f"[VirtualKeyboard] bumper: {self.bumper}")
@@ -210,6 +202,7 @@ class VirtualKeyboard(QWidget):
         if self.is_hangul:
             self.hangul_composer.reset()  # 현재 조합 상태만 초기화
         self.insert_text(' ')
+        self.bumper = True
         
     def check_length_limit(self, current_text):
         """
@@ -318,9 +311,3 @@ class VirtualKeyboard(QWidget):
         r, g, b = [int(color[i:i+2], 16) for i in (1, 3, 5)]
         return f'#{max(0, r-30):02X}{max(0, g-30):02X}{max(0, b-30):02X}'
 
-    def switch_input(self, input_widget):
-        """키보드의 활성 입력 위젯 변경"""
-        if self.input_widget != input_widget:  # 현재 입력 필드와 다를 때만 전환
-            self.input_widget = input_widget
-            self.show()  # 키보드 표시
-        self.updateGeometry()  # 키보드 레이아웃 업데이트
