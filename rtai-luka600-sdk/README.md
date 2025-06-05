@@ -1,1 +1,1 @@
-Rtai Luka600 SDK를 이용한 파이썬 코드
+ctypes_dev.py에 최신 사항 적용되어있음

@@ -180,9 +180,8 @@ try:
         #         time.sleep(30)
         # time.sleep(5)
 
-        ret = lib.R600PrintDraw(committed_img_info.encode('cp949'), committed_img_info.encode('cp949'))
+        ret = lib.R600PrintDraw(committed_img_info.encode('cp949'), ffi.NULL)
 
-        time.sleep(5)
 
         ret = lib.R600CardEject(0)
         if ret == 0:
