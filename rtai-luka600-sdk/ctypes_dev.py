@@ -103,7 +103,7 @@ if ret == 0:
 
             img_path = "12-B.jpg"
             if os.path.exists(img_path):
-                ret = lib.R600DrawWaterMark(15.0, 25.0, 0, 0, img_path.encode('cp949'))
+                ret = lib.R600DrawWaterMark(0.0, 0.0, 85.6, 53.98, img_path.encode('cp949'))
                 if ret == 0:
                     print("R600DrawWaterMark success")
                 else:
@@ -116,7 +116,7 @@ if ret == 0:
             
             img_path = "12.jpg"
             if os.path.exists(img_path):
-                ret = lib.R600DrawImage(10.0, 20.0, 0, 0, img_path.encode('cp949'), 1)
+                ret = lib.R600DrawImage(0.0, 0.0, 85.6, 53.98, img_path.encode('cp949'), 1)
                 if ret == 0:
                     print("R600DrawImage success")
                 else:
@@ -146,7 +146,7 @@ if ret == 0:
             lib.R600CommitCanvas.argtypes = [ctypes.POINTER(ctypes.c_char), ctypes.POINTER(ctypes.c_uint)]
             lib.R600CommitCanvas.restype = ctypes.c_uint
 
-            img_info_buffer_size = 200
+            img_info_buffer_size = 1000
             img_info_buffer = ctypes.create_string_buffer(img_info_buffer_size)
             p_img_info_len = ctypes.pointer(ctypes.c_uint(img_info_buffer_size))
 
