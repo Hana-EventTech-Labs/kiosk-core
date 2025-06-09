@@ -70,6 +70,15 @@ if ret == 0:
                 print("R600SetRibbonOpt success - 인쇄 모드 설정")
             else:
                 print(f"R600SetRibbonOpt failed with error code {ret}")
+            
+            lib.R600SetCanvasPortrait.argtypes = [ctypes.c_int]
+            lib.R600SetCanvasPortrait.restype = ctypes.c_uint
+
+            ret = lib.R600SetCanvasPortrait(1)
+            if ret == 0:
+                print("R600SetCanvasPortrait success")
+            else:
+                print(f"R600SetCanvasPortrait failed with error code {ret}")
 
             lib.R600PrepareCanvas.argtypes = [ctypes.c_int, ctypes.c_int]
             lib.R600PrepareCanvas.restype = ctypes.c_uint
@@ -103,7 +112,7 @@ if ret == 0:
 
             img_path = "12-B.jpg"
             if os.path.exists(img_path):
-                ret = lib.R600DrawWaterMark(0.0, 0.0, 85.6, 53.98, img_path.encode('cp949'))
+                ret = lib.R600DrawWaterMark(0.0, 0.0, 53.98, 85.6, img_path.encode('cp949'))
                 if ret == 0:
                     print("R600DrawWaterMark success")
                 else:
@@ -116,7 +125,7 @@ if ret == 0:
             
             img_path = "12.jpg"
             if os.path.exists(img_path):
-                ret = lib.R600DrawImage(0.0, 0.0, 85.6, 53.98, img_path.encode('cp949'), 1)
+                ret = lib.R600DrawImage(0.0, 0.0, 53.98, 85.6, img_path.encode('cp949'), 1)
                 if ret == 0:
                     print("R600DrawImage success")
                 else:
