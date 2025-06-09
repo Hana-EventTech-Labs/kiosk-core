@@ -92,16 +92,29 @@ if ret == 0:
             lib.R600SetAddImageMode_Rtai.argtypes = [ctypes.c_int, ctypes.c_bool, ctypes.c_bool, ctypes.c_char_p, ctypes.c_int]
             lib.R600SetAddImageMode_Rtai.restype = ctypes.c_uint
 
-            # ret = lib.R600SetAddImageMode_Rtai(3, True, False, ctypes.c_char_p(None), 220)
+            # ret = lib.R600SetAddImageMode_Rtai(3, True, False, ctypes.c_char_p(None), 100)
             # if ret == 0:
             #     print("R600SetAddImageMode_Rtai success")
             # else:
             #     print(f"R600SetAddImageMode_Rtai failed with error code {ret}")
 
+            lib.R600DrawWaterMark.argtypes = [ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_char_p]
+            lib.R600DrawWaterMark.restype = ctypes.c_uint
+
+            img_path = "12-B.jpg"
+            if os.path.exists(img_path):
+                ret = lib.R600DrawWaterMark(0.0, 0.0, 85.6, 53.98, img_path.encode('cp949'))
+                if ret == 0:
+                    print("R600DrawWaterMark success")
+                else:
+                    print(f"R600DrawWaterMark failed with error code {ret}")
+            else:
+                print(f"이미지 파일 {img_path} 존재하지 않습니다.")
+
             lib.R600DrawImage.argtypes = [ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_char_p, ctypes.c_int]
             lib.R600DrawImage.restype = ctypes.c_uint
-
-            img_path = "test.jpg"
+            
+            img_path = "12.jpg"
             if os.path.exists(img_path):
                 ret = lib.R600DrawImage(0.0, 0.0, 85.6, 53.98, img_path.encode('cp949'), 1)
                 if ret == 0:
@@ -110,30 +123,30 @@ if ret == 0:
                     print(f"R600DrawImage failed with error code {ret}")
             else:
                 print(f"이미지 파일 {img_path} 존재하지 않습니다.")
-            
-            # ret = lib.R600SetAddImageMode_Rtai(3, False, True, ctypes.c_char_p(None), 220)
+
+            # ret = lib.R600SetAddImageMode_Rtai(3, True, True, ctypes.c_char_p(None), 1)
             # if ret == 0:
             #     print("R600SetAddImageMode_Rtai success")
             # else:
             #     print(f"R600SetAddImageMode_Rtai failed with error code {ret}")
             
-            lib.R600DrawLayerBlack.argtypes = [ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_char_p]
-            lib.R600DrawLayerBlack.restype = ctypes.c_uint
+            lib.R600DrawLayerWhite.argtypes = [ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_char_p]
+            lib.R600DrawLayerWhite.restype = ctypes.c_uint
 
-            img_path_b = "12-B.jpg"
-            if os.path.exists(img_path_b):
-                ret = lib.R600DrawLayerBlack(0.0, 0.0, 85.6, 53.98, img_path_b.encode('cp949'))
-                if ret == 0:
-                    print("R600DrawLayerBlack success")
-                else:
-                    print(f"R600DrawLayerBlack failed with error code {ret}")
-            else:
-                print(f"이미지 파일 {img_path_b} 존재하지 않습니다.")
+            # img_path_b = "black.jpg"
+            # if os.path.exists(img_path_b):
+            #     ret = lib.R600DrawLayerWhite(42.8, 26.99, 42.8, 26.99, img_path_b.encode('cp949'))
+            #     if ret == 0:
+            #         print("R600DrawLayerWhite success")
+            #     else:
+            #         print(f"R600DrawLayerWhite failed with error code {ret}")
+            # else:
+            #     print(f"이미지 파일 {img_path_b} 존재하지 않습니다.")
 
             lib.R600CommitCanvas.argtypes = [ctypes.POINTER(ctypes.c_char), ctypes.POINTER(ctypes.c_uint)]
             lib.R600CommitCanvas.restype = ctypes.c_uint
 
-            img_info_buffer_size = 200
+            img_info_buffer_size = 1000
             img_info_buffer = ctypes.create_string_buffer(img_info_buffer_size)
             p_img_info_len = ctypes.pointer(ctypes.c_uint(img_info_buffer_size))
 
