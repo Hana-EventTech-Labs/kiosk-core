@@ -1,5 +1,6 @@
 import ctypes
 import os
+import time  # 상단에 추가
 
 lib = ctypes.CDLL('./libDSRetransfer600App.dll')
 
@@ -146,7 +147,7 @@ if ret == 0:
             lib.R600CommitCanvas.argtypes = [ctypes.POINTER(ctypes.c_char), ctypes.POINTER(ctypes.c_uint)]
             lib.R600CommitCanvas.restype = ctypes.c_uint
 
-            img_info_buffer_size = 1000
+            img_info_buffer_size = 3072
             img_info_buffer = ctypes.create_string_buffer(img_info_buffer_size)
             p_img_info_len = ctypes.pointer(ctypes.c_uint(img_info_buffer_size))
 
@@ -157,6 +158,9 @@ if ret == 0:
                 print(f"실제 이미지 정보 길이: {p_img_info_len.contents.value}")
             else:
                 print(f"R600CommitCanvas failed with error code {ret}")
+
+            time.sleep(1)
+
 
             lib.R600PrintDraw.argtypes = [ctypes.c_char_p, ctypes.c_char_p]
             lib.R600PrintDraw.restype = ctypes.c_uint
