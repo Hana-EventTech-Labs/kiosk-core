@@ -139,3 +139,12 @@ __pycache__/
 *.pyo
 *.pyd
 *.pdb
+
+*.jpg
+*.png
+*.bmp
+*.gif
+*.jpeg
+*.webp
+*.tiff
+*.ico
